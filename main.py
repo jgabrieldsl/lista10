@@ -1,3 +1,5 @@
+import random
+
 # Algoritmo Insertion Sort
 def insertion_sort(arr):
     a = arr[:]
@@ -43,4 +45,29 @@ def merge_sort(arr):
 
     a = arr[:]
     _sort(a, 0, len(a) - 1)
+    return a
+
+# Algoritmo Quick Sort
+def quick_sort(arr):
+    def _partition(a, lo, hi):
+        pivot_idx = random.randint(lo, hi)
+        a[pivot_idx], a[hi] = a[hi], a[pivot_idx]
+        pivot = a[hi]
+        i = lo - 1
+        for j in range(lo, hi):
+            if a[j] <= pivot:
+                i += 1
+                a[i], a[j] = a[j], a[i]
+        a[i + 1], a[hi] = a[hi], a[i + 1]
+        return i + 1
+
+    a = arr[:]
+    if len(a) > 1:
+        stack = [(0, len(a) - 1)]
+        while stack:
+            lo, hi = stack.pop()
+            if lo < hi:
+                p = _partition(a, lo, hi)
+                stack.append((lo, p - 1))
+                stack.append((p + 1, hi))
     return a
