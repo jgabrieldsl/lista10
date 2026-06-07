@@ -1,3 +1,17 @@
+"""
+Atividade Prática: Comparação Experimental de Algoritmos de Ordenação
+
+Algoritmos escolhidos:
+  - Insertion Sort  → O(n²) no pior caso
+  - Merge Sort      → O(n log n) no pior/médio caso
+  - Quick Sort      → O(n log n) médio / O(n²) pior caso (pivô ruim)
+
+Tamanhos testados : 1.000 | 10.000 | 100.000 elementos
+Execuções por caso: 3
+Timeout por run   : 5 minutos (300 s)
+
+"""
+
 import csv
 import math
 import os
@@ -12,9 +26,18 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+    print("[AVISO] matplotlib não encontrado - gráficos serão ignorados.")
 
-# Algoritmo Insertion Sort
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ALGORITMOS DE ORDENAÇÃO
+# ═══════════════════════════════════════════════════════════════════════════════
+
 def insertion_sort(arr):
+    """
+    Insertion Sort - O(n²) no pior caso.
+    Retorna (array_ordenado, movimentacoes).
+    Movimentação = cada deslocamento de elemento para a direita.
+    """
     a = arr[:]
     moves = 0
     for i in range(1, len(a)):
@@ -29,8 +52,13 @@ def insertion_sort(arr):
             moves += 1
     return a, moves
 
-# Algoritmo Merge Sort
+
 def merge_sort(arr):
+    """
+    Merge Sort - O(n log n) no pior/médio caso.
+    Retorna (array_ordenado, movimentacoes).
+    Movimentação = cada escrita durante o merge.
+    """
     counter = [0]
 
     def _merge(a, left, mid, right):
@@ -59,8 +87,13 @@ def merge_sort(arr):
     _sort(a, 0, len(a) - 1)
     return a, counter[0]
 
-# Algoritmo Quick Sort
+
 def quick_sort(arr):
+    """
+    Quick Sort com pivô aleatório - O(n log n) médio, O(n²) pior caso.
+    Retorna (array_ordenado, trocas).
+    Implementação iterativa para evitar RecursionError em Python.
+    """
     counter = [0]
 
     def _partition(a, lo, hi):
