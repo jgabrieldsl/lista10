@@ -4,6 +4,14 @@ import os
 import random
 import time
 
+try:
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+
 # Algoritmo Insertion Sort
 def insertion_sort(arr):
     a = arr[:]
@@ -146,6 +154,25 @@ def export_csv(results, path):
                     "Sim" if r["timed_out"] else "Não",
                 ])
 
+def make_graphs(results, out_dir):
+    if not HAS_MATPLOTLIB:
+        return
+    os.makedirs(out_dir, exist_ok=True)
+    
+    # Gráfico de tempo (escala linear/padrão)
+    plt.figure()
+    for algo in ALGORITHMS:
+        xs = SIZES
+        ys = [results[(algo, s)]["avg"] for s in xs]
+        plt.plot(xs, ys, label=algo, marker="o")
+    plt.title("Tempo de Execução por Algoritmo")
+    plt.xlabel("Tamanho do Vetor")
+    plt.ylabel("Tempo Médio (s)")
+    plt.legend()
+    plt.savefig(os.path.join(out_dir, "grafico_tempo_medio_linha.png"))
+    plt.close()
+
 if __name__ == "__main__":
     results = run_benchmarks()
     export_csv(results, "resultados_benchmark.csv")
+    make_graphs(results, "graficos")
